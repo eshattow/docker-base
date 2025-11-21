@@ -1,10 +1,10 @@
 name: Build base images
 
 on:
-  pull_request:
-    branches: ["master"]
-  release:
-    types: ["published"]
+  push:
+    branches: ["oob"]
+#  release:
+#    types: ["published"]
 
 env:
   BUILD_TYPE: base
@@ -28,23 +28,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get information Alpine
-        id: info_alpine
-        uses: home-assistant/actions/helpers/info@master
-        with:
-          path: "${{ github.workspace }}/alpine"
+#      - name: Get information Alpine
+#        id: info_alpine
+#        uses: home-assistant/actions/helpers/info@master
+#        with:
+#          path: "${{ github.workspace }}/alpine"
 
-      - name: Get information Debian
-        id: info_debian
-        uses: home-assistant/actions/helpers/info@master
-        with:
-          path: "${{ github.workspace }}/debian"
+#      - name: Get information Debian
+#        id: info_debian
+#        uses: home-assistant/actions/helpers/info@master
+#        with:
+#          path: "${{ github.workspace }}/debian"
 
-      - name: Get information Ubuntu
-        id: info_ubuntu
-        uses: home-assistant/actions/helpers/info@master
-        with:
-          path: "${{ github.workspace }}/ubuntu"
+#      - name: Get information Ubuntu
+#        id: info_ubuntu
+#        uses: home-assistant/actions/helpers/info@master
+#        with:
+#          path: "${{ github.workspace }}/ubuntu"
 
       - name: Get version
         id: version
@@ -62,7 +62,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        arch: ${{ fromJson(needs.init.outputs.architectures_alpine) }}
+        arch: ["amd64"]
         version: ["3.20", "3.21", "3.22"]
         include: &matrix-include-build
           - os: *runs-on-ubuntu
@@ -97,7 +97,7 @@ jobs:
           echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
 
       - name: Build base image
-        uses: home-assistant/builder@2025.09.0
+        uses: eshattow/builder@2025.09.0
         with:
           image: ${{ matrix.arch }}
           args: |
@@ -137,7 +137,7 @@ jobs:
           echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
 
       - name: Build base image
-        uses: home-assistant/builder@2025.09.0
+        uses: eshattow/builder@2025.09.0
         with:
           image: ${{ matrix.arch }}
           args: |
@@ -178,7 +178,7 @@ jobs:
           echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
 
       - name: Build base image
-        uses: home-assistant/builder@2025.09.0
+        uses: eshattow/builder@2025.09.0
         with:
           image: ${{ matrix.arch }}
           args: |
@@ -220,7 +220,7 @@ jobs:
           echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
 
       - name: Build base image
-        uses: home-assistant/builder@2025.09.0
+        uses: eshattow/builder@2025.09.0
         with:
           image: ${{ matrix.arch }}
           args: |
